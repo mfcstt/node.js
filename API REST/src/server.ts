@@ -2,7 +2,7 @@ import fastify from 'fastify';
 
 const app = fastify();
 
-// Define a routa
+// Define a rota
 // localhost:3000/
 app.get('/', () => {
   return 'Hello World';
