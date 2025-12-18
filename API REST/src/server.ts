@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import { knex } from './database.js';
+import { db } from './database.js';
 
 
 const app = fastify();
@@ -7,7 +7,7 @@ const app = fastify();
 // Define a rota
 // localhost:3000/
 app.get('/', async () => {
-  const database = await knex('sqlite_schema').select('*')
+  const database = await db('transactions').select('*');
   return database
 
 })
