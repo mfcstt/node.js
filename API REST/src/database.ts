@@ -1,10 +1,16 @@
+import 'dotenv/config'
+
 import knex from 'knex'
 import type { Knex } from 'knex'
+
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE ENVIRONMENT NOT SET')
+}
 
 export const config: Knex.Config = {
   client: 'sqlite3',
   connection: {
-    filename: './db/mydb.sqlite'
+    filename: process.env.DATABASE_URL
   },
   useNullAsDefault: true,
   migrations: {
