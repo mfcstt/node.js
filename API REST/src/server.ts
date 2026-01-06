@@ -1,17 +1,17 @@
 import fastify from 'fastify';
-import { db } from './database.js';
 import { env } from './env/index.js';
+import { transactionsRoutes } from './routes/transactions.js';
+import cookie from '@fastify/cookie'
 
 
 const app = fastify();
 
-// Define a rota
-// localhost:3000/
-app.get('/', async () => {
-  const transactions = await db('transactions').select('*');
-  return transactions;
+app.register(cookie)
 
-})
+app.register(transactionsRoutes, { 
+  prefix: '/transactions' 
+});
+
 
 app.listen({ port: env.PORT }).then(() => {
     console.log(`Server running on http://localhost:${env.PORT}`);
