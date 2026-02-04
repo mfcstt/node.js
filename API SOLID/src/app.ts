@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import { appRoutes } from './http/routes.js';
+import { appRoutes } from './http/controllers/users/routes.js';
 import 'dotenv/config'
 import z from 'zod';
 

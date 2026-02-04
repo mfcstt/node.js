@@ -1,4 +1,4 @@
-import type { UsersRepository } from "@/http/repositories/users-repository"
+import type { UsersRepository } from "@/repositories/users-repository"
 import { hash } from "bcryptjs"
 import { UserAlreadyExistsError } from "./erros/user-alredy-exists-error"
 
