@@ -3,6 +3,7 @@ import { CheckInUseCase } from '@/use-cases/check-in/check-in'
 import { InMemoryCheckInRepository } from '@/repositories/in-memory/in-memory-check-in-repository'
 import { CheckInAlreadyDoneTodayError } from '../erros/check-in-already-done-today-error'
 import { InMemoryGymsRepository } from '@/repositories/in-memory/in-memory-gyms-repository'
+import { MaxDistanceError } from '../erros/max-distance-error'
 
 
 describe('Check-in Use Case', () => {
@@ -20,8 +21,8 @@ describe('Check-in Use Case', () => {
       name: 'Shark Gym',
       description: '',
       phone: '',
-      latitude: -22.9475559,
-      longitude: -46.5309677,
+      latitude: -22.982744,
+      longitude: -46.5328319,
     })
   })
 
@@ -53,9 +54,9 @@ describe('Check-in Use Case', () => {
       userLongitude: -46.5328319,
     })
     ).rejects.toBeInstanceOf(CheckInAlreadyDoneTodayError)
-    })
+  })
 
-    it('should be able to create check-ins on different days', async () => {
+  it('should be able to create check-ins on different days', async () => {
       vi.setSystemTime(new Date(2024, 0, 20, 8, 0, 0)) // Jan 20, 2024, 08:00 AM
 
       await checkInUseCase.checkIn({
@@ -75,5 +76,25 @@ describe('Check-in Use Case', () => {
       })
 
       expect(check_in.id).toEqual(expect.any(String))
+  })
+
+  it('should not be able to check in on distant gym', async () => {
+      gymsRepository.items.push({
+      id: 'gym-02',
+      name: 'Sky Fit Gym',
+      description: '',
+      phone: '',
+      latitude: -22.9475559,
+      longitude: -46.5309677,
     })
+
+  await expect(
+    checkInUseCase.checkIn({
+      user_id: 'user-01',
+      gym_id: 'gym-02',
+      userLatitude: -22.982744,
+      userLongitude: -46.5328319,
+  })
+    ).rejects.toBeInstanceOf(MaxDistanceError)
+  })
 })
