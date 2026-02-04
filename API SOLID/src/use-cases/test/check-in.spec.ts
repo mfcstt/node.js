@@ -11,12 +11,12 @@ describe('Check-in Use Case', () => {
   let gymsRepository: InMemoryGymsRepository
   let checkInUseCase: CheckInUseCase
 
-  beforeEach(() => {
+  beforeEach(async () => {
     checkInRepository = new InMemoryCheckInRepository()
     gymsRepository = new InMemoryGymsRepository()
     checkInUseCase = new CheckInUseCase(checkInRepository, gymsRepository)
 
-    gymsRepository.items.push({
+   await gymsRepository.create({
       id: 'gym-01',
       name: 'Shark Gym',
       description: '',
@@ -79,7 +79,7 @@ describe('Check-in Use Case', () => {
   })
 
   it('should not be able to check in on distant gym', async () => {
-      gymsRepository.items.push({
+      await gymsRepository.create({
       id: 'gym-02',
       name: 'Sky Fit Gym',
       description: '',
