@@ -24,11 +24,11 @@ describe('Profile User Use Case', () => {
       const { user } = await profileUseCase.getUserProfile({
         userId: createdUser.id,
       })
-      expect(user.id).toEqual(expect.any(String))
+      await expect(user.id).toEqual(expect.any(String))
   })
 
   it('should not be able to get profile of non existing user', async () => {
-     expect(() =>
+     await expect(() =>
       profileUseCase.getUserProfile({
         userId: 'non-existing-id',
       }),

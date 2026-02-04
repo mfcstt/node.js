@@ -1,0 +1,6 @@
+import type { CheckIn, Prisma } from "prisma/generated";
+
+export interface CheckInRepository {
+  create:(data: Prisma.CheckInUncheckedCreateInput) => Promise<CheckIn>;
+  findByUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null>;
+}
