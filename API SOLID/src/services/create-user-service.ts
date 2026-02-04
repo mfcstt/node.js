@@ -21,10 +21,13 @@ export class UserService {
       throw new UserAlreadyExistsError()
     }
 
-    await this.usersRepository.create({
+    const user = await this.usersRepository.create({
       name,
       email,
       password_hash
     })
+    return {
+      user,
+    }
   }
 }
