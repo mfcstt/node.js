@@ -18,5 +18,14 @@ import type { UsersRepository } from "../users-repository";
     return user
   }
 
+  async findById(id: string) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    })
+    return user
+  }
+
 }
 

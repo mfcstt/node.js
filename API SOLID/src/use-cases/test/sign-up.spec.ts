@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, test } from 'vitest'
 import { SignUpUseCase } from '@/use-cases/users/sign-up'
 import { compare } from 'bcryptjs'
 import {InMemoryUsersRepository}  from '@/repositories/in-memory/in-memory-users-repository'
-import { UserAlreadyExistsError } from '../use-cases/erros/user-alredy-exists-error'
+import { UserAlreadyExistsError } from '../erros/user-alredy-exists-error'
 
 // unit tests for create-user service
 describe('Register User Service', () => {
