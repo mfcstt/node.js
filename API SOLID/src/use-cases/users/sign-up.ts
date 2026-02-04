@@ -1,8 +1,8 @@
 import type { UsersRepository } from "@/repositories/users-repository"
 import { hash } from "bcryptjs"
-import { UserAlreadyExistsError } from "./erros/user-alredy-exists-error"
+import { UserAlreadyExistsError } from "@/use-cases/erros/user-alredy-exists-error"
 
-interface registerUserParams {
+interface signUpUserParams {
   name: string,
   email: string,
   password: string,
@@ -10,10 +10,10 @@ interface registerUserParams {
   
 // SOLID - Dependency Inversion Principle
 
-export class UserService {
+export class SignUpUseCase {
   constructor(private usersRepository: UsersRepository) {}
   
-  async register ({ name, email, password }: registerUserParams) {
+  async signup ({ name, email, password }: signUpUserParams) {
     const password_hash = await hash(password, 6)
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
 
