@@ -3,6 +3,6 @@ import { LoginUseCase } from "../users/login"
 
 export function makeLoginUseCase() {
     const usersRepository = new PrismaUsersRepository()
-    const loginUseCase = new LoginUseCase(usersRepository)
-    return loginUseCase
+    const useCase = new LoginUseCase(usersRepository)
+    return useCase
 }

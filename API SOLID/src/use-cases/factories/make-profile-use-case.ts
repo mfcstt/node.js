@@ -3,6 +3,6 @@ import { ProfileUseCase } from "../users/profile"
 
 export function makeProfileUseCase() {
     const usersRepository = new PrismaUsersRepository()
-    const profileUseCase = new ProfileUseCase(usersRepository)
-    return profileUseCase
+    const useCase = new ProfileUseCase(usersRepository)
+    return useCase
 }
