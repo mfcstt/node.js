@@ -22,7 +22,7 @@ export async function authenticateUser(request: FastifyRequest, reply: FastifyRe
         sub: user.id
       }
     })
-    return reply.status(200).send(token)
+    return reply.status(200).send({ token })
   }
 
 

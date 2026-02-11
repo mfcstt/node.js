@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { registerUser } from "./sign-up-controller";
 import { authenticateUser } from "./login-controller";
 import { userProfile } from "./profile-controller";
-import { verifyJwt } from "@/http/middlewares/verify-jwt";
+import { verifyJwt } from "@/http/controllers/users/middlewares/verify-jwt";
 
 
 export async function appRoutes(app: FastifyInstance){

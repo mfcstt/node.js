@@ -1,4 +1,4 @@
-import { verifyJwt } from "@/http/middlewares/verify-jwt";
+import { verifyJwt } from "@/http/controllers/users/middlewares/verify-jwt";
 import { makeProfileUseCase } from "@/use-cases/factories/make-profile-use-case";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
