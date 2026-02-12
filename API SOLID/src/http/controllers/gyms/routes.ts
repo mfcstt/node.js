@@ -3,12 +3,13 @@ import { verifyJwt } from "@/http/controllers/users/middlewares/verify-jwt";
 import { createGymController } from "./create";
 import { searchGymsController } from "./search";
 import { nearbyGymsController } from "./nearby";
+import { verifyUserRole } from "../users/middlewares/verify-user-role";
 
 
 export async function gymsRoutes(app: FastifyInstance){
 
 app.addHook('onRequest', verifyJwt)
-app.post('/gym', createGymController)
+app.post('/gym',{onRequest: [verifyUserRole('ADMIN')]},createGymController)
 app.get('/gym/search', searchGymsController)
 app.get('/gym/nearby', nearbyGymsController)
 }
