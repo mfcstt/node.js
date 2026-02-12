@@ -1,7 +1,9 @@
-import { PrismaClient } from "../../prisma/generated";
+
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
-import { env } from '@/env'
+
+import { env } from '@/env/index.js'
+import { PrismaClient } from 'prisma/generated/index.js'
 
 // Carregue a URL do DB do processo (geralmente via .env)
 const connectionString = env.DATABASE_URL
