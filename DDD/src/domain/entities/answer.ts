@@ -1,5 +1,5 @@
-import { Entity } from "../../core/entities/entity.js";
-import type { Optional } from "../../core/types/optional.js";
+import { Entity } from "@/core/entities/entity.js";
+import type { Optional } from "@/core/types/optional.js";
 import type { UniqueEntityID } from "./value-objects/unique-entity-id.js";
 
 interface AnswerProps {
