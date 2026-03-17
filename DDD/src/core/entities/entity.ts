@@ -1,4 +1,4 @@
-import { UniqueEntityID } from '@/domain/entities/value-objects/unique-entity-id.js'
+import { UniqueEntityID } from '@/domain/forum/enterprise/entities/value-objects/unique-entity-id.js'
 
 export class Entity<Props> {
   private _id: UniqueEntityID
