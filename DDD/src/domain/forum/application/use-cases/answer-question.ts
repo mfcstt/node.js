@@ -1,6 +1,6 @@
-import type { AnswersRepository } from '@/repositories/answers-repository.js'
 import { UniqueEntityID } from '../../enterprise/entities/value-objects/unique-entity-id.js'
 import { Answer } from '../../enterprise/entities/answer.js'
+import type { AnswersRepository } from '../repositories/answers-repository.js'
 
 interface AnswerQuestionUseCaseRequest {
   questionId: string
