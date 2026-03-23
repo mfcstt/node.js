@@ -34,4 +34,11 @@ export class InMemoryQuestionRepository implements QuestionsRepository{
 
     return question
   }
+
+  async update(question: Question): Promise<void> {
+    const questionIndex = this.items.findIndex(item => item.id === question.id)
+   
+      this.items[questionIndex] = question
+    
+  }
 }
