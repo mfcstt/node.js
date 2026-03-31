@@ -20,16 +20,14 @@ describe('Edit Question Use Case', () => {
       },
       new UniqueEntityID('question-1'),
     )
-
     await inMemoryQuestionsRepository.create(newQuestion)
-
-    await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       authorId: 'author-1',
       title: 'Updated Title',
       content: 'Updated Content'
     })
-
+    expect(result.isRight()).toBe(true)
     expect(inMemoryQuestionsRepository.items[0]).toMatchObject({
       title: 'Updated Title',
       content: 'Updated Content'
@@ -43,16 +41,13 @@ describe('Edit Question Use Case', () => {
       },
       new UniqueEntityID('question-1'),
     )
-
     await inMemoryQuestionsRepository.create(newQuestion)
-
-    expect(() => {
-      return sut.execute({
-        questionId: 'question-1',
-        authorId: 'author-2',
-        title: 'Updated Title',
-        content: 'Updated Content'
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      questionId: 'question-1',
+      authorId: 'author-2',
+      title: 'Updated Title',
+      content: 'Updated Content'
+    })
+    expect(result.isLeft()).toBe(true)
   })
 })

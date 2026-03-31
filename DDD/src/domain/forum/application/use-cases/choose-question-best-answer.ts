@@ -1,46 +1,57 @@
 import type { Question } from '../../enterprise/entities/question.js'
 import type { AnswersRepository } from '../repositories/answers-repository.js'
 import type { QuestionsRepository } from '../repositories/questions-repository.js'
+import { left, right } from '@/core/either.js'
+import type { Either } from '@/core/either.js'
+import { ResourceNotFoundError } from './errors/resource-not-found-error.js'
+import { NotAllowedError } from './errors/not-allowed-error.js'
 
-interface ChooseQuestionBestAnswerRequest {
+interface ChooseQuestionBestAnswerUseCaseRequest {
   authorId: string
   answerId: string
 }
 
-interface ChooseQuestionBestAnswerResponse {
-  question: Question
-}
+type ChooseQuestionBestAnswerUseCaseResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  {
+    question: Question
+  }
+>
 
 export class ChooseQuestionBestAnswerUseCase {
   constructor(
-    private answerRepository: AnswersRepository,
-    private questionRepository: QuestionsRepository
+    private questionsRepository: QuestionsRepository,
+    private answersRepository: AnswersRepository,
   ) {}
+
   async execute({
+    answerId,
     authorId,
-    answerId
-  }: ChooseQuestionBestAnswerRequest): Promise<ChooseQuestionBestAnswerResponse> {
-    
-    const answer = await this.answerRepository.findById(answerId)
+  }: ChooseQuestionBestAnswerUseCaseRequest): Promise<ChooseQuestionBestAnswerUseCaseResponse> {
+    const answer = await this.answersRepository.findById(answerId)
 
     if (!answer) {
-      throw new Error('Answer not found')
+      return left(new ResourceNotFoundError())
     }
 
-    const question = await this.questionRepository.findById(answer.questionId.toString())
+    const question = await this.questionsRepository.findById(
+      answer.questionId.toString(),
+    )
 
     if (!question) {
-      throw new Error('Question not found')
+      return left(new ResourceNotFoundError())
     }
 
     if (authorId !== question.authorId.toString()) {
-      throw new Error('You are not the author of this question')
+      return left(new NotAllowedError())
     }
 
     question.bestAnswerId = answer.id
 
-    await this.questionRepository.update(question)
+    await this.questionsRepository.update(question)
 
-    return { question }
+    return right({
+      question,
+    })
   }
 }

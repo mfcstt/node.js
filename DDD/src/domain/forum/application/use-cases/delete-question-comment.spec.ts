@@ -16,14 +16,12 @@ describe('Delete Question Comment', () => {
 
   it('should be able to delete a question comment', async () => {
     const questionComment = makeQuestionComment()
-
     await inMemoryQuestionCommentsRepository.create(questionComment)
-
-    await sut.execute({
+    const result = await sut.execute({
       questionCommentId: questionComment.id.toString(),
       authorId: questionComment.authorId.toString(),
     })
-
+    expect(result.isRight()).toBe(true)
     expect(inMemoryQuestionCommentsRepository.items).toHaveLength(0)
   })
 
@@ -31,14 +29,11 @@ describe('Delete Question Comment', () => {
     const questionComment = makeQuestionComment({
       authorId: new UniqueEntityID('author-1'),
     })
-
     await inMemoryQuestionCommentsRepository.create(questionComment)
-
-    expect(() => {
-      return sut.execute({
-        questionCommentId: questionComment.id.toString(),
-        authorId: 'author-2',
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      questionCommentId: questionComment.id.toString(),
+      authorId: 'author-2',
+    })
+    expect(result.isLeft()).toBe(true)
   })
 })

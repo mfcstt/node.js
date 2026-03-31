@@ -1,22 +1,28 @@
 import type { Question } from '../../enterprise/entities/question.js'
 import type { QuestionsRepository } from '../repositories/questions-repository.js'
+import { left, right } from '@/core/either.js'
+import type { Either } from '@/core/either.js'
+import { ResourceNotFoundError } from './errors/resource-not-found-error.js'
 
 interface FetchRecentQuestionsRequest {
   page: number
 }
 
-interface FetchRecentQuestionsResponse {
-  questions: Question[]
-}
+type FetchRecentQuestionsResponse = Either<
+  ResourceNotFoundError,
+  {
+    questions: Question[]
+  }
+>
 
 export class FetchRecentQuestionsUseCase {
   constructor(private questionRepository: QuestionsRepository) {}
   async execute({
     page
   }: FetchRecentQuestionsRequest): Promise<FetchRecentQuestionsResponse> {
-    
+    // Aqui poderia haver uma checagem de erro, mas mantendo padrão dos outros fetch
     const questions = await this.questionRepository.findManyRecent({ page })
 
-    return { questions }
+    return right({ questions })
   }
 }

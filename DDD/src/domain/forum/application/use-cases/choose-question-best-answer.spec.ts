@@ -17,54 +17,49 @@ describe('Choose Question Best Answer', () => {
     inMemoryAnswersRepository = new InMemoryAnswersRepository()
 
     sut = new ChooseQuestionBestAnswerUseCase(
-      inMemoryAnswersRepository,
-      inMemoryQuestionsRepository
+      inMemoryQuestionsRepository,
+      inMemoryAnswersRepository
     )
   })
 
   it('should be able to choose the question best answer', async () => {
-     const question = makeQuestion(
+    const question = makeQuestion(
       {
         authorId: new UniqueEntityID('author-1'),
       }, new UniqueEntityID('question-1')
-     )
-
+    )
     const answer = makeAnswer({
       questionId: question.id,
-    }, new UniqueEntityID('answer-1')
-  )
-
+    }, new UniqueEntityID('answer-1'))
     await inMemoryQuestionsRepository.create(question)
     await inMemoryAnswersRepository.create(answer)
-
-    await sut.execute({
+    const result = await sut.execute({
       answerId: answer.id.toString(),
       authorId: question.authorId.toString(),
     })
-
-    expect (inMemoryQuestionsRepository.items[0]!.bestAnswerId).toEqual(answer.id)
+    expect(result.isRight()).toBe(true)
+    if (result.isRight()) {
+      expect(result.value.question.bestAnswerId).toEqual(answer.id)
+    }
+    // Garante que o repositório também foi atualizado
+    expect(inMemoryQuestionsRepository.items[0]?.bestAnswerId).toEqual(answer.id)
   })
 
   it('should not be able to to choose another user question best answer', async () => {
-      const question = makeQuestion(
+    const question = makeQuestion(
       {
         authorId: new UniqueEntityID('author-1'),
       }, new UniqueEntityID('question-1')
-     )
-
+    )
     const answer = makeAnswer({
       questionId: question.id,
-    }, new UniqueEntityID('answer-1')
-  )
-
+    }, new UniqueEntityID('answer-1'))
     await inMemoryQuestionsRepository.create(question)
     await inMemoryAnswersRepository.create(answer)
-
-    expect(() => {
-      return sut.execute({
-        answerId: answer.id.toString(),
-        authorId: 'author-2',
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      answerId: answer.id.toString(),
+      authorId: 'author-2',
+    })
+    expect(result.isLeft()).toBe(true)
   })
 })

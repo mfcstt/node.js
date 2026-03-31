@@ -18,13 +18,11 @@ it('should be able to get a question by its slug', async () => {
   const newQuestion = makeQuestion({
     slug: Slug.create('how-to-create-a-question?'),
   })
-
   inMemoryQuestionRepository.create(newQuestion)
-
-  const {question} = await sut.execute({
+  const result = await sut.execute({
     slug: 'how-to-create-a-question?',
   })
-  
-  expect(question.id).toBeTruthy()
+  expect(result.isRight()).toBe(true)
+  expect(result.value.question.id).toBeTruthy()
 })
 })

@@ -14,21 +14,18 @@ describe('Delete Answer', () => {
   })
 
   it('should be able to delete an answer', async () => {
-
     const newAnswer = makeAnswer(
       {
         authorId: new UniqueEntityID('author-1'),
       },
       new UniqueEntityID('answer-1'),
     )
-
     await inMemoryAnswersRepository.create(newAnswer)
-
-    await sut.execute({
+    const result = await sut.execute({
       answerId: 'answer-1',
       authorId: 'author-1',
     })
-
+    expect(result.isRight()).toBe(true)
     expect(inMemoryAnswersRepository.items).toHaveLength(0)
   })
 
@@ -39,14 +36,11 @@ describe('Delete Answer', () => {
       },
       new UniqueEntityID('answer-1'),
     )
-
     await inMemoryAnswersRepository.create(newAnswer)
-
-    expect(() => {
-      return sut.execute({
-        answerId: 'answer-1',
-        authorId: 'author-2',
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      answerId: 'answer-1',
+      authorId: 'author-2',
+    })
+    expect(result.isLeft()).toBe(true)
   })
 })

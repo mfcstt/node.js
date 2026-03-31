@@ -24,15 +24,13 @@ describe('Edit Answer Use Case', () => {
       },
       new UniqueEntityID('question-1'),
     )
-
     await inMemoryAnswersRepository.create(newAnswer)
-
-    await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       authorId: 'author-1',
       content: 'Updated Content'
     })
-
+    expect(result.isRight()).toBe(true)
     expect(inMemoryAnswersRepository.items[0]).toMatchObject({
       content: 'Updated Content'
     })
@@ -46,15 +44,12 @@ describe('Edit Answer Use Case', () => {
       },
       new UniqueEntityID('question-1'),
     )
-
     await inMemoryAnswersRepository.create(newAnswer)
-
-    expect(() => {
-      return sut.execute({
-        questionId: 'question-1',
-        authorId: 'author-2',
-        content: 'Updated Content'
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      questionId: 'question-1',
+      authorId: 'author-2',
+      content: 'Updated Content'
+    })
+    expect(result.isLeft()).toBe(true)
   })
 })

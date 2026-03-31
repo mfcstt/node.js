@@ -1,4 +1,8 @@
 import type { AnswersRepository } from '../repositories/answers-repository.js'
+import { left, right } from '@/core/either.js'
+import { NotAllowedError } from './errors/not-allowed-error.js'
+import { ResourceNotFoundError } from './errors/resource-not-found-error.js'
+import type { Either } from '@/core/either.js'
 
 interface EditAnswerRequest {
   authorId: string
@@ -6,7 +10,10 @@ interface EditAnswerRequest {
   content: string
 }
 
-interface EditAnswerResponse {}
+type EditAnswerResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  {}
+>
 
 export class EditAnswerUseCase {
   constructor(private answerRepository: AnswersRepository) {}
@@ -15,21 +22,20 @@ export class EditAnswerUseCase {
     questionId,
     content
   }: EditAnswerRequest): Promise<EditAnswerResponse> {
-    
     const answer = await this.answerRepository.findById(questionId)
 
     if (!answer) {
-      throw new Error('Answer not found')
+      return left(new ResourceNotFoundError())
     }
 
     if (authorId !== answer.authorId.toString()){
-      throw new Error('You are not the author of this answer')
+      return left(new NotAllowedError())
     }
 
     answer.content = content
 
     await this.answerRepository.update(answer)
 
-    return {}
+    return right({})
   }
 }
