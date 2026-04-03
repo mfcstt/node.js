@@ -1,14 +1,16 @@
 import  { InMemoryQuestionRepository } from "test/repositories/in-memory-question-repository.js"
 import  { FetchRecentQuestionsUseCase } from "./fetch-recent-questions.js"
 import { makeQuestion } from "test/factories/make-question.js"
+import { InMemoryQuestionAttachmentsRepository } from "test/repositories/in-memory-question-attachments-repository.js"
 
-
+let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
 let inMemoryQuestionsRepository: InMemoryQuestionRepository
 let sut: FetchRecentQuestionsUseCase
 
 describe('Fetch Recent Questions', () => {
   beforeEach(() => {
-    inMemoryQuestionsRepository = new InMemoryQuestionRepository()
+    inMemoryQuestionAttachmentsRepository = new InMemoryQuestionAttachmentsRepository()
+    inMemoryQuestionsRepository = new InMemoryQuestionRepository(inMemoryQuestionAttachmentsRepository)
     sut = new FetchRecentQuestionsUseCase(inMemoryQuestionsRepository)
   })
 
@@ -26,11 +28,13 @@ describe('Fetch Recent Questions', () => {
       page: 1,
     })
     expect(result.isRight()).toBe(true)
-    expect(result.value.questions).toEqual([
-      expect.objectContaining({ createdAt: new Date(2022, 0, 23) }),
-      expect.objectContaining({ createdAt: new Date(2022, 0, 20) }),
-      expect.objectContaining({ createdAt: new Date(2022, 0, 18) }),
-    ])
+    if (result.isRight()) {
+      expect(result.value.questions).toEqual([
+        expect.objectContaining({ createdAt: new Date(2022, 0, 23) }),
+        expect.objectContaining({ createdAt: new Date(2022, 0, 20) }),
+        expect.objectContaining({ createdAt: new Date(2022, 0, 18) }),
+      ])
+    }
   })
 
   it('should be able to fetch paginated recent questions', async () => {
@@ -41,6 +45,8 @@ describe('Fetch Recent Questions', () => {
       page: 2,
     })
     expect(result.isRight()).toBe(true)
+    if (result.isRight()) {
     expect(result.value.questions).toHaveLength(2)
+    }
   })
 })
