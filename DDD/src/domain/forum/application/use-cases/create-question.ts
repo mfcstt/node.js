@@ -4,6 +4,7 @@ import { Question } from '../../enterprise/entities/question.js'
 import { right } from '@/core/either.js'
 import type { Either } from '@/core/either.js'
 import { QuestionAttachment } from '../../enterprise/entities/question-attachment.js'
+import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list.js'
 
 interface CreateQuestionRequest {
   authorId: string
@@ -36,12 +37,12 @@ export class CreateQuestionUseCase {
 
     const questionAttachments = attachmentsIds.map((attachmentId) => {
       return QuestionAttachment.create({
-        attachmentId: attachmentId,
-        questionId: question.id.toString(),
+        attachmentId: new UniqueEntityID(attachmentId),
+        questionId: question.id,
       })
     })
 
-    question.attachments = questionAttachments
+    question.attachments = new QuestionAttachmentList(questionAttachments)
 
     await this.questionRepository.create(question)
     return right({
