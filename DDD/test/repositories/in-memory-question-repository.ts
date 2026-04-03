@@ -1,8 +1,13 @@
+import type { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository.js"
 import type { QuestionsRepository } from "@/domain/forum/application/repositories/questions-repository.js"
 import type { Question } from "@/domain/forum/enterprise/entities/question.js"
 
 export class InMemoryQuestionRepository implements QuestionsRepository{
   public items: Question[] = []
+
+  constructor(
+    private questionAttachmentsRepository: QuestionAttachmentsRepository,
+  ) {}
 
 
   async findById(id: string): Promise<Question | null> {
@@ -19,6 +24,10 @@ export class InMemoryQuestionRepository implements QuestionsRepository{
     if (questionIndex !== -1) {
       this.items.splice(questionIndex, 1)
     }
+
+    this.questionAttachmentsRepository.deleteManyByQuestionId(
+      question.id.toString(),
+    )
   }
 
   async create(question: Question) {
