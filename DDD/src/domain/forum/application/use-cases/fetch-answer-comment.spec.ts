@@ -1,5 +1,5 @@
 import { makeAnswerComment } from "test/factories/make-answer-comment.js"
-import { UniqueEntityID } from "../../enterprise/entities/value-objects/unique-entity-id.js"
+import { UniqueEntityID } from "../../../../core/entities/unique-entity-id.js"
 import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comment-repository.js"
 import { FetchAnswerCommentsUseCase } from "./fetch-answer-comment.js"
 

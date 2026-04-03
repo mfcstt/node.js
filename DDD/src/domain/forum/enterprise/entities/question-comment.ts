@@ -1,7 +1,7 @@
 import type { Optional } from "@/core/types/optional.js"
 import type { CommentProps} from "./comment.js"
 import { Comment } from "./comment.js"
-import type { UniqueEntityID } from "./value-objects/unique-entity-id.js"
+import type { UniqueEntityID } from "../../../../core/entities/unique-entity-id.js"
 
 
 export interface QuestionCommentProps extends CommentProps {

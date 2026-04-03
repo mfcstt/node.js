@@ -1,4 +1,4 @@
-import { UniqueEntityID } from '../../enterprise/entities/value-objects/unique-entity-id.js'
+import { UniqueEntityID } from '../../../../core/entities/unique-entity-id.js'
 import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-repository.js'
 import { DeleteAnswerUseCase } from './delete-answer.js'
 import { makeAnswer } from 'test/factories/make-answer.js'

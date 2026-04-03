@@ -1,4 +1,4 @@
-import { UniqueEntityID } from '../../enterprise/entities/value-objects/unique-entity-id.js'
+import { UniqueEntityID } from '../../../../core/entities/unique-entity-id.js'
 import type { QuestionsRepository } from '../repositories/questions-repository.js'
 import { Question } from '../../enterprise/entities/question.js'
 import { left, right } from '@/core/either.js'

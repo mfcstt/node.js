@@ -1,6 +1,6 @@
 import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question-repository.js'
 import { GetQuestionBySlugUseCase } from './get-question-by-slug.js'
-import { UniqueEntityID } from '../../enterprise/entities/value-objects/unique-entity-id.js'
+import { UniqueEntityID } from '../../../../core/entities/unique-entity-id.js'
 import { Slug } from '../../enterprise/entities/value-objects/slug.js'
 import { Question } from '../../enterprise/entities/question.js'
 import { makeQuestion } from 'test/factories/make-question.js'

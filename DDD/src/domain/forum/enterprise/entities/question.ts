@@ -1,5 +1,5 @@
 import { Slug } from './value-objects/slug.js'
-import type { UniqueEntityID } from './value-objects/unique-entity-id.js'
+import type { UniqueEntityID } from '../../../../core/entities/unique-entity-id.js'
 import type { Optional } from '@/core/types/optional.js'
 import dayjs from 'dayjs'
 import { AggregateRoot } from '@/core/entities/aggregate-root.js'

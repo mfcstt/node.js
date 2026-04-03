@@ -1,6 +1,6 @@
 import { Entity } from '@/core/entities/entity.js'
 import type { Optional } from '@/core/types/optional.js'
-import type { UniqueEntityID } from './value-objects/unique-entity-id.js'
+import type { UniqueEntityID } from '../../../../core/entities/unique-entity-id.js'
 
 export interface AnswerProps {
   content: string

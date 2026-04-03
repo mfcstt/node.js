@@ -1,7 +1,7 @@
 import  { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository.js"
 import  { FetchQuestionAnswersUseCase } from "./fetch-question-answers.js"
 import { makeAnswer } from "test/factories/make-answer.js"
-import { UniqueEntityID } from "../../enterprise/entities/value-objects/unique-entity-id.js"
+import { UniqueEntityID } from "../../../../core/entities/unique-entity-id.js"
 
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository

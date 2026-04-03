@@ -1,5 +1,5 @@
 import { Question, type QuestionProps } from '@/domain/forum/enterprise/entities/question.js'
-import  { UniqueEntityID } from '@/domain/forum/enterprise/entities/value-objects/unique-entity-id.js'
+import  { UniqueEntityID } from '@/core/entities/unique-entity-id.js'
 import { faker } from '@faker-js/faker'
 
 

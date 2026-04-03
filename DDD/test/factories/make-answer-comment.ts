@@ -1,5 +1,5 @@
 import { AnswerComment, type AnswerCommentProps } from "@/domain/forum/enterprise/entities/answer-comment.js"
-import { UniqueEntityID } from "@/domain/forum/enterprise/entities/value-objects/unique-entity-id.js"
+import { UniqueEntityID } from "@/core/entities/unique-entity-id.js"
 import { faker } from "@faker-js/faker"
 
 export function makeAnswerComment(

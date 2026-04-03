@@ -1,7 +1,7 @@
 import { AnswerQuestionUseCase } from './answer-question.js'
 import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question-repository.js'
 import { CreateQuestionUseCase } from './create-question.js'
-import { UniqueEntityID } from '../../enterprise/entities/value-objects/unique-entity-id.js'
+import { UniqueEntityID } from '../../../../core/entities/unique-entity-id.js'
 
 let inMemoryQuestionRepository: InMemoryQuestionRepository
 let sut: CreateQuestionUseCase
