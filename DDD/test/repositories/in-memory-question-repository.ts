@@ -1,3 +1,4 @@
+import { DomainEvents } from "@/core/events/domain-events.js"
 import type { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository.js"
 import type { QuestionsRepository } from "@/domain/forum/application/repositories/questions-repository.js"
 import type { Question } from "@/domain/forum/enterprise/entities/question.js"
@@ -32,6 +33,8 @@ export class InMemoryQuestionRepository implements QuestionsRepository{
 
   async create(question: Question) {
     this.items.push(question)
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
   
   async findBySlug(slug: string): Promise<Question | null> {
@@ -48,6 +51,8 @@ export class InMemoryQuestionRepository implements QuestionsRepository{
     const questionIndex = this.items.findIndex(item => item.id === question.id)
    
       this.items[questionIndex] = question
+
+      DomainEvents.dispatchEventsForAggregate(question.id)
     
   }
 
