@@ -1,60 +1,90 @@
-# Atividade (DDD): Mapeando o Domínio — Sistema de Estoque
+# Domain-Driven Design (DDD) — Módulo Node.js (Rocketseat)
 
-Atividade do módulo **Fundamentos de DDD** (Formação Node.js — Rocketseat).
+Este documento resume os principais conceitos trabalhados no módulo de **DDD** da formação **Node.js** da **Rocketseat**, servindo como guia rápido do que foi aprendido e por que cada ideia importa na prática.
 
-## Objetivo
-Ler a conversa entre **Domain Expert** e **Dev** e, a partir dela, identificar:
+---
 
-- **Entidades de domínio**
-- **Ações do sistema (casos de uso)**
+## Fundamentos do DDD
 
-## Diálogo
+O **Domain-Driven Design** coloca o **domínio** (regras de negócio) no centro do software. Em vez de começar por telas ou banco de dados, modelamos o problema com **conceitos do negócio**, alinhados ao que especialistas e desenvolvedores falam no dia a dia. Objetivos típicos:
 
-Dev: Olá, obrigado por participar da entrevista. Para começar, quais são as principais funcionalidades que você gostaria de ver nesse sistema de gerenciamento de estoque?
+- Reduzir divergência entre “o que o negócio quer” e “o que o código faz”.
+- Isolar regras complexas em camadas e módulos coerentes.
+- Evoluir o sistema junto com a compreensão do domínio.
 
-Domain Expert: Precisamos de uma solução que nos permita rastrear cada produto individualmente, definir quantidades mínimas de estoque e receber alertas quando estivermos ficando sem um determinado produto. Também seria útil se pudéssemos visualizar o histórico de vendas e estoque para ajudar a tomarmos decisões futuras de compra.
+---
 
-Dev: Entendi. Você poderia me dar um exemplo de como você gostaria que a funcionalidade de rastreamento individual de produto funcionasse?
+## Linguagem ubíqua
 
-Domain Expert: Gostaríamos de poder atribuir um número de identificação único a cada produto, para podermos rastrear facilmente suas movimentações em nosso estoque. Também seria útil se pudéssemos adicionar informações extras, como tamanho e cor, para tornar o rastreamento ainda mais preciso.
+A **linguagem ubíqua** é o vocabulário **compartilhado** entre o time técnico e o time de negócio. Termos iguais no código, nas conversas e na documentação **reduzem ambiguidade**. Quando todos dizem “pedido”, “assinatura” ou “slug” com o mesmo significado, o modelo fica mais estável e as discussões mais produtivas.
 
-Dev:  E quanto a funcionalidade de definição de quantidades mínimas de estoque, como você imaginaria isso funcionando?
+---
 
-Domain Expert: Gostaríamos de poder definir um limite mínimo para cada produto, de forma que pudéssemos receber um alerta quando o estoque estiver chegando próximo ao fim. Isso nos ajudaria a garantir que nunca fiquemos sem um produto popular e também nos permitiria fazer pedidos mais eficientes.
+## Value Objects
 
-Dev: E como você gostaria de receber esses alertas? Por e-mail, SMS ou algum outro método?
+**Value Objects** são objetos definidos **pelo valor**, não por identidade: dois valores com os mesmos atributos são considerados **iguais**. São **imutáveis** e encapsulam validações (formato de e-mail, intervalo de datas, dinheiro com moeda). Exemplos: `Money`, `Email`, `Slug`. Eles evitam “primitive obsession” e concentram invariantes em um só lugar.
 
-Domain Expert: Seria ótimo se pudéssemos receber alertas por e-mail e também por meio de uma notificação em nosso sistema de gerenciamento de estoque.
+---
 
-Dev: Entendi. E quanto a funcionalidade de visualização de histórico de vendas e estoque, que tipo de informações você gostaria de ver?
+## Entidades
 
-Domain Expert: Gostaríamos de poder ver quantos produtos vendemos em um determinado período, qual foi o lucro gerado por produto e quais produtos estão vendendo melhor em cada período. Também seria útil se pudéssemos observar as tendências de estoque ao longo do tempo, para nos ajudar a tomar decisões de compra mais adequadas.
+**Entidades** têm **identidade única** ao longo do tempo (ex.: `id`). Podem mudar estado e ainda serem “a mesma” coisa no domínio. A identidade importa mais que a igualdade por atributos — dois usuários com o mesmo nome são entidades diferentes se os ids forem diferentes.
 
-Dev:  Ok, e você tem alguma outra funcionalidade que gostaria de ver no sistema?
+---
 
-Domain Expert: Seria muito útil se o sistema pudesse nos permitir criar e gerenciar ordens de compra automaticamente, com base nas quantidades mínimas de estoque definidas e nas tendências de vendas. Também seria ótimo se pudéssemos integrar o sistema com nossos fornecedores, para que pudéssemos receber atualizações automáticas sobre os prazos de entrega de novas remessas.
+## Agregados
 
-## Respostas
+Um **agregado** é um **cluster de entidades e value objects** tratado como **uma unidade de consistência**. Há uma **raiz do agregado (aggregate root)** que é o único ponto de entrada para alterações externas. Isso delimita **transações** e **invariantes**: mudanças que precisam ser sempre verdadeiras ficam dentro do agregado, evitando que o modelo vire um “grafo solto” sem regras claras.
 
-### Entidades de domínio
-- **Produto**
-- **Estoque**
-- **Movimentação de Estoque**
-- **Ordem de Compra**
-- **Fornecedor**
-- **Alerta**
-- **Venda**
+---
 
-### Casos de uso
-- **Cadastrar produto**
-- **Rastrear produto**
-- **Registrar movimentação de estoque**
-- **Definir quantidade mínima por produto**
-- **Notificar estoque baixo**
-- **Visualizar histórico de vendas**
-- **Visualizar histórico de estoque** 
-- **Gerar métricas/relatórios** 
-- **Criar/gerenciar ordem de compra automaticamente**
-- **Integrar com fornecedores**
+## Watched List
+
+A **watched list** (lista observada) é um padrão útil para rastrear **itens adicionados ou removidos** de uma coleção no domínio, por exemplo para disparar **eventos de domínio** ou sincronizar persistência sem comparar o estado inteiro do banco a cada vez. Ajuda a manter o modelo explícito sobre **o que mudou** dentro do agregado.
+
+---
+
+## Casos de uso (use cases)
+
+**Use cases** (ou **application services**) orquestram o fluxo da aplicação: chamam repositórios, entidades e serviços de domínio, sem conter **regra de negócio pura** que pertença à entidade ou ao domínio. São a “lista de intenções” do sistema: *Registrar usuário*, *Criar post*, *Comentar*. No Node, costumam ficar em uma camada de **aplicação**, separados de HTTP e de detalhes de infraestrutura.
+
+---
+
+## Bounded Context
+
+Um **bounded context** é um **limite** onde um modelo de domínio é **consistente**. A mesma palavra pode ter significados diferentes em contextos diferentes (ex.: “Cliente” no financeiro vs. no suporte). Contextos distintos podem se integrar via **contratos** (eventos, APIs, anti-corruption layer), sem forçar um único modelo global frágil.
+
+---
+
+## Eventos de domínio
+
+**Domain events** registram **algo relevante que já aconteceu** no domínio: *PedidoPago*, *UsuárioRegistrado*. São imutáveis, orientados ao passado e úteis para desacoplar reações (enviar e-mail, atualizar leitura, integrar com outro contexto). Podem ser disparados a partir de agregados e processados de forma síncrona ou assíncrona, conforme a arquitetura.
+
+---
+
+## Subdomínios
+
+O domínio grande pode ser dividido em **subdomínios** — áreas com problemas e linguagem próprios. Costuma-se diferenciar:
+
+- **Core**: o que gera vantagem competitiva (máximo cuidado no DDD).
+- **Supporting**: apoia o core, mas não é o diferencial.
+- **Generic**: soluções comuns (pagamento genérico, notificação), candidatas a integrações ou pacotes prontos.
+
+Essa visão ajuda a priorizar onde investir em modelo rico e onde simplificar.
+
+---
+
+## Clean Architecture
+
+A **Clean Architecture** organiza o código em **camadas com dependências apontando para dentro**: regras de negócio e entidades **não** dependem de frameworks, banco ou HTTP. Na prática no Node:
+
+- **Entidades e domínio** no centro.
+- **Casos de uso** em volta, sem detalhes de UI ou DB.
+- **Adaptadores** (controllers, repositórios concretos, ORMs) na borda.
+
+Isso facilita testes, troca de tecnologia e manutenção alinhada ao DDD, onde o **modelo de domínio** permanece estável enquanto os detalhes mudam.
 
 
+---
+
+*Formação Node.js — Rocketseat · Módulo DDD*
