@@ -1,0 +1,67 @@
+import { DomainEvents } from "src/core/events/domain-events.js"
+import type { QuestionAttachmentsRepository } from "src/domain/forum/application/repositories/question-attachments-repository.js"
+import type { QuestionsRepository } from "src/domain/forum/application/repositories/questions-repository.js"
+import type { Question } from "src/domain/forum/enterprise/entities/question.js"
+
+export class InMemoryQuestionRepository implements QuestionsRepository{
+  public items: Question[] = []
+
+  constructor(
+    private questionAttachmentsRepository: QuestionAttachmentsRepository,
+  ) {}
+
+
+  async findById(id: string): Promise<Question | null> {
+    const question = this.items.find(item => item.id.toString() === id)
+    if (!question) {
+      return null
+    }
+
+    return question
+  }
+
+  async delete(question: Question): Promise<void> {
+    const questionIndex = this.items.findIndex(item => item.id.toString() === question.id.toString())
+    if (questionIndex !== -1) {
+      this.items.splice(questionIndex, 1)
+    }
+
+    this.questionAttachmentsRepository.deleteManyByQuestionId(
+      question.id.toString(),
+    )
+  }
+
+  async create(question: Question) {
+    this.items.push(question)
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
+  }
+  
+  async findBySlug(slug: string): Promise<Question | null> {
+    const question = this.items.find(item => item.slug.text === slug)
+
+    if (!question) {
+      return null
+    }
+
+    return question
+  }
+
+  async update(question: Question): Promise<void> {
+    const questionIndex = this.items.findIndex(item => item.id === question.id)
+   
+      this.items[questionIndex] = question
+
+      DomainEvents.dispatchEventsForAggregate(question.id)
+    
+  }
+
+  async findManyRecent({ page }: { page: number }): Promise<Question[]> {
+    const pageSize = 20
+    const startIndex = (page - 1) * pageSize
+    const endIndex = startIndex + pageSize
+    const sortedItems = this.items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+
+    return sortedItems.slice(startIndex, endIndex)
+  }
+}
